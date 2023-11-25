@@ -92,6 +92,35 @@ Navigate to the /bin folder and create the following 3 topics:
 
 ```
 ./kafka-topics.sh --bootstrap-server BootstrapServerString --command-config client.properties --create --topic <topic_name>
+
+```
+# Connecting the MSK Cluster to an S3 Bucket
+
+### Step 1: Create a custom plugin with MSK Connect
+In this step, download the following connector from Confluent and copy the file to the assigned S3 bucket
+
+```
+wget https://d1i4a15mxbxib1.cloudfront.net/api/plugins/confluentinc/kafka-connect-s3/versions/10.0.3/confluentinc-kafka-connect-s3-10.0.3.zip
+```
+
+### Step 2: Create the MSK Connector
+In the Connector configuration settings, use the following configuration:
+```
+connector.class=io.confluent.connect.s3.S3SinkConnector
+# same region as our bucket and cluster
+s3.region=us-east-1
+flush.size=1
+schema.compatibility=NONE
+tasks.max=3
+# include nomeclature of topic name, given here as an example will read all data from topic names starting with msk.topic....
+topics.regex=<TOPIC_ROOT>.*
+format.class=io.confluent.connect.s3.format.json.JsonFormat
+partitioner.class=io.confluent.connect.storage.partitioner.DefaultPartitioner
+value.converter.schemas.enable=false
+value.converter=org.apache.kafka.connect.json.JsonConverter
+storage.class=io.confluent.connect.s3.storage.S3Storage
+key.converter=org.apache.kafka.connect.storage.StringConverter
+s3.bucket.name=<BUCKET_NAME>
 ```
 
 
