@@ -80,10 +80,15 @@ On the MSK cluster, go to the View Client Information tab and copy the Bootstrap
 
 ### Step 5: Create 3 topics:
 Navigate to the /bin folder and create the following 3 topics: 
-
+```
 <your_UserId>.pin
+```
+```
 <your_UserId>.geo
+```
+```
 <your_UserId>.user
+```
 
 ```
 ./kafka-topics.sh --bootstrap-server BootstrapServerString --command-config client.properties --create --topic <topic_name>
