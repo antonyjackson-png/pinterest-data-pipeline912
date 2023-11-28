@@ -94,7 +94,7 @@ Navigate to the /bin folder and create the following 3 topics:
 ./kafka-topics.sh --bootstrap-server BootstrapServerString --command-config client.properties --create --topic <topic_name>
 
 ```
-# Connecting the MSK Cluster to an S3 Bucket
+## Connecting the MSK Cluster to an S3 Bucket
 
 ### Step 1: Create a custom plugin with MSK Connect
 In this step, download the following connector from Confluent and copy the file to the assigned S3 bucket
@@ -122,7 +122,49 @@ storage.class=io.confluent.connect.s3.storage.S3Storage
 key.converter=org.apache.kafka.connect.storage.StringConverter
 s3.bucket.name=<BUCKET_NAME>
 ```
+## Send Data to the API
 
+## Step 1: Integrate the API with Kafka
+On the client EC2 instance run the following commands to install the REST proxy package:
+
+```
+sudo wget https://packages.confluent.io/archive/7.2/confluent-7.2.0.tar.gz
+```
+```
+tar -xvzf confluent-7.2.0.tar.gz
+```
+
+Navigate to confluent-7.2.0/etc/kafka-rest and configure the kafka-rest.properties file with the followng information:
+
+# Sets up TLS for encryption and SASL for authN.
+client.security.protocol = SASL_SSL
+
+# Identifies the SASL mechanism to use.
+client.sasl.mechanism = AWS_MSK_IAM
+
+# Binds SASL client implementation.
+client.sasl.jaas.config = software.amazon.msk.auth.iam.IAMLoginModule required awsRoleArn="{your aws access role arn}";
+
+# Encapsulates constructing a SigV4 signature based on extracted credentials.
+# The SASL client bound by "sasl.jaas.config" invokes this class.
+client.sasl.client.callback.handler.class = software.amazon.msk.auth.iam.IAMClientCallbackHandler
+
+Note that the configuration is similar to the client.properties file from earlier, except client. is a prefix to all the commands.
+
+### Step 2: Start the REST proxy
+In order for messages to be consumed in MSK, start the REST proxy:
+
+```
+./kafka-rest-start /home/ec2-user/confluent-7.2.0/etc/kafka-rest/kafka-rest.properties
+```
+
+### Step 3: Send JSON Objects to the API
+Streaming data is simulated with a Python script that emulates user posts on Pinterest.
+
+The API is configured to receive JSON objects.  The ```user_posting_emulation.py``` script is modified to do so; in particular timestamp objects are converted to strings.
+
+### Step 4: Check the Messages have been written to the S3 Bucket
+If successful, a \topics directory will have been created in the S3 bucket and JSON objects for the <user-name>.pin, <user-name>.geo and <user-name>.user topics can be accessed and examined. 
 
 
 
