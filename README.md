@@ -135,7 +135,7 @@ tar -xvzf confluent-7.2.0.tar.gz
 ```
 
 Navigate to confluent-7.2.0/etc/kafka-rest and configure the kafka-rest.properties file with the followng information:
-
+```
 # Sets up TLS for encryption and SASL for authN.
 client.security.protocol = SASL_SSL
 
@@ -148,6 +148,7 @@ client.sasl.jaas.config = software.amazon.msk.auth.iam.IAMLoginModule required a
 # Encapsulates constructing a SigV4 signature based on extracted credentials.
 # The SASL client bound by "sasl.jaas.config" invokes this class.
 client.sasl.client.callback.handler.class = software.amazon.msk.auth.iam.IAMClientCallbackHandler
+```
 
 Note that the configuration is similar to the client.properties file from earlier, except client. is a prefix to all the commands.
 
