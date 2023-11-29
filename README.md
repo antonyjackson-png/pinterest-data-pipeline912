@@ -167,7 +167,14 @@ The API is configured to receive JSON objects.  The ```user_posting_emulation.py
 ### Step 4: Check the Messages have been written to the S3 Bucket
 If successful, a \topics directory will have been created in the S3 bucket and JSON objects for the <user-name>.pin, <user-name>.geo and <user-name>.user topics can be accessed and examined. 
 
+## Batch Processing with Databricks
+This step involves writing a Python notebook, which I have given the title ```Milestone 6 Task 2.ipynb``` to mount an S3 bucket to Databricks.
 
+The notebook process the JSON messages into three dataframes:
+
+```df_pin```
+```df_geo```
+```df_user```
 
 
 
