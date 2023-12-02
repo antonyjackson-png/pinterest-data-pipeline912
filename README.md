@@ -176,15 +176,42 @@ The notebook process the JSON messages into three dataframes:
 ```df_geo```
 ```df_user```
 
+## Batch Processing: Spark on Databricks
 
+### Step 1: Clean the DataFrame that contains information about Pinterest posts
+Given the size of the spark dataframe, I converted the dataframe to a pandas dataframe using the following commands:
 
+```
+pin_df = df_pin.select("*").toPandas()
+pin_df_copy = pin_df.copy()
+```
+The data cleaning tasks can be viewed in the Milestone7.ipynb 
 
+### Step 2: Clean the DataFrame that contains information about geolocation
+The same process was followed as in Step 1, but with the geo_pin dataframe.
 
+### Step 3: Clean the DataFrame that contains information about users
+The same process was followed, but with the user_pin dataframe.
 
+### Steps 4-11: Run Various SQL Queries on the Clean DataFrames
+I decided to use the duckdb library for these tasks:
 
+```
+!pip install duckdb
+import duckdb
+```
 
+duckdb is simple to use; here's a simple example:
 
+```
+query = '''
+        SELECT * 
+          FROM user_df_copy
+            LIMIT 10;
+        '''
 
+duckdb.query(query).df()
+```
 
-
+ALl the queries and their outputs can be found in the Milestone7.ipynb
 
