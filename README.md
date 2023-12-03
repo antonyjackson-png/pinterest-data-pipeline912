@@ -215,3 +215,50 @@ duckdb.query(query).df()
 
 ALl the queries and their outputs can be found in the Milestone7.ipynb
 
+## Batch Processing: AWS MMWAA
+
+### Step 1: Create and upload a DAG to an MWAA environment
+
+In this step, a Python script is uploaded to the MWAA S3 bucket.  The script has the title 1207b70ab7db_dag.py
+
+### Step 2: Trigger the DAG that runs the 'Milestone 7' notebook
+
+Within MWAA, the Apache Airflow UI is opened and the DAG is unpaused, then triggered.
+
+As the notebook is running, a bright green circle is displayed.
+
+Upon successful completion of the job, a dark green square is displayed. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
