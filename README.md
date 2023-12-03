@@ -1,4 +1,5 @@
 # Pinterest Data Pipeline
+Pinterest crunches billions of data points every day to decide how to provide more value to their users. In this project, we create a similiar system using the AWS Cloud.
 
 ## Setting up Kafka on the EC2 instance
 
@@ -213,7 +214,7 @@ query = '''
 duckdb.query(query).df()
 ```
 
-ALl the queries and their outputs can be found in the Milestone7.ipynb
+All the queries and their outputs can be found in the Milestone7.ipynb
 
 ## Batch Processing: AWS MMWAA
 
@@ -229,9 +230,41 @@ As the notebook is running, a bright green circle is displayed.
 
 Upon successful completion of the job, a dark green square is displayed. 
 
+## Stream Processing: AWS Kinesis
 
+### Step 1: Create Kinesis Data Streams
 
+I created three streams:
 
+```streaming-1207b70ab7db-pin```
+```streaming-1207b70ab7db-geo```
+```streaming-1207b70ab7db-user```
+
+### Step 2: Configure an API with Kinesis procy integration
+In this step, the API is adapted to:
+
+-List streams in Kinesis
+-Create, describe and delete streams in Kinesis
+-Add records to streams in Kinesis
+
+### Step 3: Send data to the Kinesis streams
+The script that emulates streaming data has the title user_posting_emulation_streaming.py.
+
+The script adds one record at a time to the three streams created in Step 1.
+
+### Step 4: Read data from Kinesis streams in Databricks
+The notebook that reads data from Kinesis streams into Databricks has the title 'Milestone 9.ipynb'.
+
+The main difference from the batch processing performed earlier is that I cleaned the Spark dataframes directly, rather than converting to pandas dataframes.
+
+### Step 5: Write the streaming data to Delta Tables
+The commands for this step can be found at the end of the 'Milestone 9.ipynb' notebook.
+
+We can confirm that the Delta Tables have been successfully created by navigating to Cataglogs > Databases > Tables in the Databricks console. I have taken three screenshots, corresponding to each stream, with the following filenames:
+
+```1207b70ab7db_pin_table.png```
+```1207b70ab7db_geo_table.png```
+```1207b70ab7db_user_table.png```
 
 
 
